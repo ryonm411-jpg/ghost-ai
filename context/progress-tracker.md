@@ -14,6 +14,7 @@ change.
 ## Completed
 
 - 01-design-system: shadcn/ui initialized (base-nova preset), cn() utility created, all 7 components installed (Button, Card, Dialog, Input, Tabs, Textarea, ScrollArea), lucide-react installed, dark mode enforced via `dark` class on html element. `npm run build` passes.
+- 02-editor: Editor chrome components created. `EditorNavbar` (fixed-height top bar with sidebar toggle using PanelLeftOpen/PanelLeftClose icons, left/center/right sections). `ProjectSidebar` (overlay sidebar that slides in from left without pushing content, Projects header with close button, shadcn Tabs for My Projects/Shared with empty placeholder states, full-width New Project button with Plus icon). Dialog pattern ready for future use via existing shadcn Dialog component (supports title, description, footer actions). `npm run build` passes.
 
 ## In Progress
 
