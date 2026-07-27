@@ -5,8 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
+    --font-heading: var(--font-geist-sans);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+    --color-auth-panel: var(--auth-panel);
+    --color-auth-accent: var(--auth-accent);
+    --color-auth-accent-foreground: var(--auth-accent-foreground);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -80,6 +84,9 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --auth-panel: oklch(0.97 0.018 219);
+    --auth-accent: oklch(0.72 0.14 210);
+    --auth-accent-foreground: oklch(0.145 0 0);
 }
 
 .dark {
@@ -114,6 +121,9 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+    --auth-panel: oklch(0.18 0.018 250);
+    --auth-accent: oklch(0.72 0.14 210);
+    --auth-accent-foreground: oklch(0.145 0 0);
 }
 
 @layer base {
