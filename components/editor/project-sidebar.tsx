@@ -3,15 +3,73 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Project } from "@/lib/types";
 
 interface ProjectSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+  onCreateProject: () => void;
+  onRenameProject: (project: Project) => void;
+  onDeleteProject: (project: Project) => void;
 }
 
-export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
+function ProjectItem({
+  project,
+  showActions,
+  onRename,
+  onDelete,
+}: {
+  project: Project;
+  showActions: boolean;
+  onRename: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="group flex items-center justify-between rounded-md px-2 py-1.5 text-sm text-foreground hover:bg-muted/50">
+      <span className="truncate">{project.name}</span>
+      {showActions && (
+        <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={(e) => {
+              e.stopPropagation();
+              onRename();
+            }}
+            aria-label={`Rename ${project.name}`}
+          >
+            <Pencil className="size-3" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            aria-label={`Delete ${project.name}`}
+          >
+            <Trash2 className="size-3" />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function ProjectSidebar({
+  isOpen,
+  onClose,
+  ownedProjects,
+  sharedProjects,
+  onCreateProject,
+  onRenameProject,
+  onDeleteProject,
+}: ProjectSidebarProps) {
   return (
     <>
       {/* Backdrop overlay — click to close */}
@@ -57,27 +115,55 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
 
             <TabsContent value="my-projects" className="flex-1">
               <ScrollArea className="h-full">
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    No projects yet
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground/60">
-                    Create your first project to get started
-                  </p>
-                </div>
+                {ownedProjects.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      No projects yet
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground/60">
+                      Create your first project to get started
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-0.5 py-2">
+                    {ownedProjects.map((project) => (
+                      <ProjectItem
+                        key={project.id}
+                        project={project}
+                        showActions
+                        onRename={() => onRenameProject(project)}
+                        onDelete={() => onDeleteProject(project)}
+                      />
+                    ))}
+                  </div>
+                )}
               </ScrollArea>
             </TabsContent>
 
             <TabsContent value="shared" className="flex-1">
               <ScrollArea className="h-full">
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    No shared projects
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground/60">
-                    Projects shared with you will appear here
-                  </p>
-                </div>
+                {sharedProjects.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      No shared projects
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground/60">
+                      Projects shared with you will appear here
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-0.5 py-2">
+                    {sharedProjects.map((project) => (
+                      <ProjectItem
+                        key={project.id}
+                        project={project}
+                        showActions={false}
+                        onRename={() => {}}
+                        onDelete={() => {}}
+                      />
+                    ))}
+                  </div>
+                )}
               </ScrollArea>
             </TabsContent>
           </Tabs>
@@ -85,7 +171,7 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
 
         {/* Footer — New Project button */}
         <div className="shrink-0 border-t border-border p-3">
-          <Button className="w-full gap-2" size="default">
+          <Button className="w-full gap-2" size="default" onClick={onCreateProject}>
             <Plus className="size-4" />
             New Project
           </Button>
